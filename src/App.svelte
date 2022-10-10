@@ -1,12 +1,9 @@
 <script>
-	export let name;
-  console.log('Logging from the App componenet.');
+	// noop
 </script>
 
 <main>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+	ghx
 </main>
 
 <style>
