@@ -1,9 +1,15 @@
 # ghx
 
-## To set up
+## Development
+
+### To set up
 
 Execute `yarn`.
 
-## To run
+### To run
 
-Exectue `yarn start`.
+Exectue `yarn electron-dev`.
+
+### To package
+
+Exectue `yarn electron-pack`.
