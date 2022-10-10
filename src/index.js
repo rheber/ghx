@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog } = require('electron');
+const { app, BrowserWindow, session } = require('electron');
 const path = require('path');
 const serve = require('electron-serve');
 const loadURL = serve({ directory: 'public' });
@@ -12,7 +12,17 @@ function isDev() {
     return !app.isPackaged;
 }
 
-function createWindow() {    
+function createWindow() {
+    // Set CSP to appease security warning.
+    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+          'Content-Security-Policy': ["default-src 'self' localhost:* ws://localhost:*;"],
+        }
+      })
+    });
+
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 800,
@@ -74,5 +84,3 @@ app.on('activate', function () {
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) createWindow()
 });
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
