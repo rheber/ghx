@@ -1,7 +1,18 @@
+<script>
+  export let onLogout;
+  export let username;
+</script>
+
 <div class="root">
-  <div>
-    <p>ghx</p>
-  </div>
+  <div>ghx</div>
+  {#if username}
+    <div>
+      <div>{username}</div>
+      <button on:click={onLogout}>
+        Log Out
+      </button>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -12,6 +23,7 @@
     display: flex;
     height: 64px;
     margin-bottom: 8px;
+    justify-content: space-between;
     padding: 8px;
   }
 </style>
