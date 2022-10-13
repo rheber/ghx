@@ -18,7 +18,9 @@ function createWindow() {
       callback({
         responseHeaders: {
           ...details.responseHeaders,
-          'Content-Security-Policy': ["default-src 'self' localhost:* ws://localhost:*;"],
+          'Content-Security-Policy': [
+            "default-src 'self' localhost:* ws://localhost:* https://api.github.com;"
+          ],
         }
       })
     });
@@ -28,10 +30,10 @@ function createWindow() {
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: false,
             preload: path.join(__dirname, 'preload.js'),
-            // enableRemoteModule: true,
-            // contextIsolation: false
+            enableRemoteModule: false,
+            contextIsolation: true,
         },
         icon: path.join(__dirname, 'public/favicon.png'),
         show: false
