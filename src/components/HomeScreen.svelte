@@ -1,6 +1,6 @@
 <script>
   import AppBar from "./AppBar/index.svelte";
-  import Login from "./Login.svelte";
+  import Login from "./Login/index.svelte";
 
   let loggingIn = true;
   let username;

@@ -1,5 +1,5 @@
 <script>
-  export let onLogin;
+  export let onLogin = () => {};
   let username;
 
   const handleLogin = () => {

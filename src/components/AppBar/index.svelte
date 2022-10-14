@@ -1,5 +1,5 @@
 <script>
-  export let onLogout;
+  export let onLogout = () => {};
   export let username;
 </script>
 
