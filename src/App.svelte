@@ -1,15 +1,5 @@
 <script>
-	import HomeScreen from "./components/HomeScreen.svelte";
-
-	let ready = false;
-
-	window.addEventListener('preloadComplete', () => {
-		ready = true;
-	});
+  import HomeScreen from "./components/HomeScreen.svelte";
 </script>
 
-{#if ready}
-	<HomeScreen />
-{:else}
-  Loading...
-{/if}
+<HomeScreen />
