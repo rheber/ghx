@@ -1,10 +1,19 @@
 <script>
+  import { getContext } from 'svelte';
+
+  import ThemeSwitch from "../ThemeSwitch.svelte";
+
+  let theme = getContext('theme');
+
   export let onLogout = () => {};
   export let username;
 </script>
 
 <div class="root">
-  <div>ghx</div>
+  <div>
+    <div>ghx</div>
+    <ThemeSwitch />
+  </div>
   {#if username}
     <div>
       <div>{username}</div>
