@@ -29,7 +29,8 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "electron-serve": "^1.1.0"
+    "electron-serve": "^1.1.0",
+    "untildify": "^4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
