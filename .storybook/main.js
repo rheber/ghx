@@ -7,7 +7,8 @@ module.exports = {
     "@storybook/addon-svelte-csf",
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-interactions"
+    "@storybook/addon-interactions",
+    'storybook-addon-themes'
   ],
   "core": {
     "disableTelemetry": true

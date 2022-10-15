@@ -6,4 +6,11 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  themes: {
+    default: 'dark',
+    list: [
+      { name: 'dark', class: 'theme-dark', color: '#000099' },
+      { name: 'light', class: 'theme-light', color: '#ddddaa' }
+    ],
+  },
 }
