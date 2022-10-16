@@ -6,6 +6,8 @@
   console.log('using theme context decorator');
 </script>
 
-<ThemeContext>
-  <slot></slot>
-</ThemeContext>
+<div id="theme-context-decorator">
+  <ThemeContext>
+    <slot></slot>
+  </ThemeContext>
+</div>

@@ -10,10 +10,12 @@ export const parameters = {
   },
   themes: {
     default: 'dark',
+    clearable: false,
     list: [
       { name: 'dark', class: 'theme-dark', color: '#000099' },
       { name: 'light', class: 'theme-light', color: '#ddddaa' }
     ],
+    target: '#theme-context-decorator',
   },
 }
 
