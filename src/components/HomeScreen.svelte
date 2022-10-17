@@ -50,7 +50,7 @@
   };
 </script>
 
-<div>
+<div class="root">
   <AppBar username={username} onLogout={handleLogout} />
   {#if loggingIn}
     <Login onLogin={handleLogin} />
@@ -58,7 +58,9 @@
 </div>
 
 <style>
-  div {
+  .root {
+    display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
   }
