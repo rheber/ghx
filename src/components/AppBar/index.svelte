@@ -12,7 +12,6 @@
 <div class="root">
   <div>
     <div>ghx</div>
-    <ThemeSwitch />
   </div>
   {#if username}
     <div>
