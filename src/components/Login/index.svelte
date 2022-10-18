@@ -26,7 +26,7 @@
     display: flex;
     height: 100%;
     justify-content: center;
-}
+  }
 
   form {
     align-self: center;

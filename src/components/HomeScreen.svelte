@@ -2,7 +2,13 @@
   import AppBar from "./AppBar/index.svelte";
   import Login from "./Login/index.svelte";
 
-  let loggingIn = true;
+  const LoginStatus = Object.freeze({
+    LoggedOut: 'LoggedOut',
+    LoggingIn: 'LoggingIn',
+    LoggedIn: 'LoggedIn',
+  });
+  let loginStatus = LoginStatus.LoggedOut;
+
   let username;
 
   const range = (start = 0, end) => {
@@ -36,24 +42,33 @@
 
   const handleLogin = async (submittedUsername) => {
     username = submittedUsername;
-    loggingIn = false;
+    loginStatus = LoginStatus.LoggingIn;
     const followees = await fetchFollowees(username);
     followees.sort((a, b) => {
       return a.login.toLowerCase() < b.login.toLowerCase() ? -1 : 1;
     });
     console.log(followees);
+    loginStatus = LoginStatus.LogedIn;
   };
 
   const handleLogout = () => {
-    loggingIn = true;
+    loginStatus = LoginStatus.LoggedOut;
     username = undefined;
   };
 </script>
 
 <div class="root">
   <AppBar username={username} onLogout={handleLogout} />
-  {#if loggingIn}
+  {#if loginStatus === LoginStatus.LoggedOut}
     <Login onLogin={handleLogin} />
+  {:else if loginStatus === LoginStatus.LoggingIn}
+    <div class="logging-in">
+      <div class="logging-in-inner">
+        Logging in...
+      </div>
+    </div>
+  {:else}
+    Logged in
   {/if}
 </div>
 
@@ -63,5 +78,18 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
+  }
+
+  .logging-in {
+    align-items:center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+  }
+
+  .logging-in-inner {
+    align-items:center;
+    align-self:stretch;
+    display: flex;
   }
 </style>
