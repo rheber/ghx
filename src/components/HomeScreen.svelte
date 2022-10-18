@@ -1,5 +1,6 @@
 <script>
   import AppBar from "./AppBar/index.svelte";
+  import Following from "./Following/index.svelte";
   import Login from "./Login/index.svelte";
 
   const LoginStatus = Object.freeze({
@@ -10,6 +11,8 @@
   let loginStatus = LoginStatus.LoggedOut;
 
   let username;
+
+  let followees = [];
 
   const range = (start = 0, end) => {
     return [...Array(start + end).keys()].map(i => i + start);
@@ -43,11 +46,12 @@
   const handleLogin = async (submittedUsername) => {
     username = submittedUsername;
     loginStatus = LoginStatus.LoggingIn;
-    const followees = await fetchFollowees(username);
-    followees.sort((a, b) => {
+    const fetchedFollowees = await fetchFollowees(username);
+    fetchedFollowees.sort((a, b) => {
       return a.login.toLowerCase() < b.login.toLowerCase() ? -1 : 1;
     });
-    console.log(followees);
+    console.log(fetchedFollowees);
+    followees = fetchedFollowees;
     loginStatus = LoginStatus.LogedIn;
   };
 
@@ -68,7 +72,7 @@
       </div>
     </div>
   {:else}
-    Logged in
+    <Following followees={followees} />
   {/if}
 </div>
 

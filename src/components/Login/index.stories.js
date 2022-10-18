@@ -4,7 +4,7 @@ export default {
   title: 'Login',
   component: Login,
 };
-const Template = (args)=>({
+const Template = (args) => ({
   component: Login,
   props: args,
 });

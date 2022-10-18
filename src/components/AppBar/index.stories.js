@@ -4,7 +4,7 @@ export default {
   title: 'AppBar',
   component: AppBar,
 };
-const Template = (args)=>({
+const Template = (args) => ({
   component: AppBar,
   props: args,
 });
