@@ -44,6 +44,7 @@
   };
 
   const handleLogin = async (submittedUsername) => {
+    preload.loadCache().then(data => console.log(data));
     username = submittedUsername;
     loginStatus = LoginStatus.LoggingIn;
     const fetchedFollowees = await fetchFollowees(username);
@@ -51,6 +52,11 @@
       return a.login.toLowerCase() < b.login.toLowerCase() ? -1 : 1;
     });
     console.log(fetchedFollowees);
+    await preload.saveCache({ users: [
+      {
+        [username]: { followees: fetchedFollowees },
+      },
+    ] });
     followees = fetchedFollowees;
     loginStatus = LoginStatus.LogedIn;
   };

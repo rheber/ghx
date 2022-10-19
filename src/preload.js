@@ -1,5 +1,6 @@
 const fsPromises = require('fs/promises');
 const untildify = require('untildify');
+const { contextBridge } = require('electron');
 
 const loadCache = async () => {
     const cachePath = untildify('~/.ghx.cache');
@@ -12,11 +13,26 @@ const loadCache = async () => {
             await fsPromises.writeFile(cachePath, newData);
             return newData;
         } catch (writeErr) {
-            console.log(writeErr);
+            console.error(writeErr);
         }
     }
-}
-loadCache().then(data => console.log(data));
+};
+
+const saveCache = async (data) => {
+    const cachePath = untildify('~/.ghx.cache');
+    try {
+        const serialized = JSON.stringify(data);
+        await fsPromises.writeFile(cachePath, serialized);
+        console.log('Wrote cache.');
+    } catch (writeErr) {
+        console.error(writeErr);
+    }
+};
+
+contextBridge.exposeInMainWorld('preload', {
+    loadCache,
+    saveCache,
+});
 
 window.addEventListener('DOMContentLoaded', () => {
 });
