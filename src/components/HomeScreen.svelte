@@ -14,6 +14,8 @@
 
   let followees = [];
 
+  //$: console.log(followees);
+
   const range = (start = 0, end) => {
     return [...Array(start + end).keys()].map(i => i + start);
   }
@@ -51,24 +53,33 @@
     fetchedFollowees.sort((a, b) => {
       return a.login.toLowerCase() < b.login.toLowerCase() ? -1 : 1;
     });
+
+    const cachedUser = parsedCache.users.find(u => u.login === username);
+
     const mappedFollowees = fetchedFollowees.map(f => {
       const followee = { id: f.id, login: f.login };
-      const cachedFollowee = parsedCache.users[username].followees.find(
-        cf => cf.id === f.id
-      );
-      if (cachedFollowee) {
-        followee.annotation = cf.annotation;
+      if (cachedUser) {
+        const cachedFollowee = cachedUser.followees.find(
+          cf => cf.id === f.id
+        );
+        if (cachedFollowee) {
+          followee.annotation = cachedFollowee.annotation;
+        }
       }
       return followee;
     });
+
+    let users = parsedCache.users || [];
+    if (cachedUser) {
+      cachedUser.followees = mappedFollowees;
+    } else {
+      users = [...users, { login: username, followees: mappedFollowees }];
+    }
+
+    console.log(users);
+
     await preload.saveCache({
-      ...parsedCache,
-      users: [
-        {
-          ...loadedCache.users,
-          [username]: { followees: mappedFollowees },
-        },
-      ]
+      users,
     });
     followees = mappedFollowees;
     loginStatus = LoginStatus.LogedIn;
@@ -91,7 +102,7 @@
       </div>
     </div>
   {:else}
-    <Following followees={followees} />
+    <Following bind:followees={followees} />
   {/if}
 </div>
 
