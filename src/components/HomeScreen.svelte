@@ -14,8 +14,6 @@
 
   let followees = [];
 
-  $: console.log(followees);
-
   const range = (start = 0, end) => {
     return [...Array(start + end).keys()].map(i => i + start);
   }
@@ -54,7 +52,14 @@
       return a.login.toLowerCase() < b.login.toLowerCase() ? -1 : 1;
     });
     const mappedFollowees = fetchedFollowees.map(f => {
-      return { id: f.id, login: f.login };
+      const followee = { id: f.id, login: f.login };
+      const cachedFollowee = parsedCache.users[username].followees.find(
+        cf => cf.id === f.id
+      );
+      if (cachedFollowee) {
+        followee.annotation = cf.annotation;
+      }
+      return followee;
     });
     await preload.saveCache({
       ...parsedCache,
