@@ -1,4 +1,6 @@
 <script>
+  import debounce from 'lodash/debounce';
+
   import AppBar from "./AppBar/index.svelte";
   import Following from "./Following/index.svelte";
   import Login from "./Login/index.svelte";
@@ -14,7 +16,26 @@
 
   let followees = [];
 
-  //$: console.log(followees);
+  const writeCache = async (followees) => {
+    const loadedCache = await preload.loadCache();
+    const parsedCache = JSON.parse(loadedCache);
+    let users = parsedCache.users || [];
+    const cachedUser = parsedCache.users.find(u => u.login === username);
+    if (cachedUser) {
+      cachedUser.followees = followees;
+    } else {
+      users = [...users, { login: username, followees, }];
+    }
+    await preload.saveCache({
+      users,
+    });
+  };
+
+  const debouncedWriteCache = debounce((followees) => {
+    writeCache(followees);
+  }, 500);
+
+  $: debouncedWriteCache(followees);
 
   const range = (start = 0, end) => {
     return [...Array(start + end).keys()].map(i => i + start);
@@ -75,8 +96,6 @@
     } else {
       users = [...users, { login: username, followees: mappedFollowees }];
     }
-
-    console.log(users);
 
     await preload.saveCache({
       users,

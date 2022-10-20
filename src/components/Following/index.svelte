@@ -1,11 +1,5 @@
 <script>
-  import debounce from 'lodash/debounce';
-
   export let followees = [];
-
-  const handleChange = debounce(() => {
-    console.log('aaaa');
-  }, 1000);
 </script>
 
 <div class="root">
@@ -15,7 +9,7 @@
       <div class="spacer" />
       <div>{followee.login}</div>
       <div class="spacer" />
-      <input bind:value={followee.annotation} on:input={handleChange}/>
+      <input bind:value={followee.annotation} />
     </div>
   {/each}
 </div>
