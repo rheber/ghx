@@ -9,7 +9,7 @@ const loadCache = async () => {
         return data;
     } catch (readErr) {
         try {
-            const newData = '{users:[]}';
+            const newData = '{"users":[]}';
             await fsPromises.writeFile(cachePath, newData);
             return newData;
         } catch (writeErr) {

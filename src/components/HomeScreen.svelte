@@ -14,6 +14,8 @@
 
   let followees = [];
 
+  $: console.log(followees);
+
   const range = (start = 0, end) => {
     return [...Array(start + end).keys()].map(i => i + start);
   }
@@ -44,6 +46,7 @@
 
   const handleLogin = async (submittedUsername) => {
     const loadedCache = await preload.loadCache();
+    const parsedCache = JSON.parse(loadedCache);
     username = submittedUsername;
     loginStatus = LoginStatus.LoggingIn;
     const fetchedFollowees = await fetchFollowees(username);
@@ -54,7 +57,7 @@
       return { id: f.id, login: f.login };
     });
     await preload.saveCache({
-      ...loadedCache,
+      ...parsedCache,
       users: [
         {
           ...loadedCache.users,

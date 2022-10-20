@@ -9,7 +9,7 @@
       <div class="spacer" />
       <div>{followee.login}</div>
       <div class="spacer" />
-      <input />
+      <input bind:value={followee.annotation} />
     </div>
   {/each}
 </div>
