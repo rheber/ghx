@@ -24,7 +24,6 @@
       // Get user data.
       const userResponse = await fetch(userUrl);
       const userJson = await userResponse.json();
-      console.log(userJson);
 
       // Get followee data.
       const followingAmount = userJson.following;
@@ -44,20 +43,26 @@
   };
 
   const handleLogin = async (submittedUsername) => {
-    preload.loadCache().then(data => console.log(data));
+    const loadedCache = await preload.loadCache();
     username = submittedUsername;
     loginStatus = LoginStatus.LoggingIn;
     const fetchedFollowees = await fetchFollowees(username);
     fetchedFollowees.sort((a, b) => {
       return a.login.toLowerCase() < b.login.toLowerCase() ? -1 : 1;
     });
-    console.log(fetchedFollowees);
-    await preload.saveCache({ users: [
-      {
-        [username]: { followees: fetchedFollowees },
-      },
-    ] });
-    followees = fetchedFollowees;
+    const mappedFollowees = fetchedFollowees.map(f => {
+      return { id: f.id, login: f.login };
+    });
+    await preload.saveCache({
+      ...loadedCache,
+      users: [
+        {
+          ...loadedCache.users,
+          [username]: { followees: mappedFollowees },
+        },
+      ]
+    });
+    followees = mappedFollowees;
     loginStatus = LoginStatus.LogedIn;
   };
 

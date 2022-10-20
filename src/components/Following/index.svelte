@@ -8,6 +8,8 @@
       <div class="index">{idx + 1}</div>
       <div class="spacer" />
       <div>{followee.login}</div>
+      <div class="spacer" />
+      <input />
     </div>
   {/each}
 </div>
