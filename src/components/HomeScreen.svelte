@@ -4,6 +4,8 @@
   import AppBar from "./AppBar/index.svelte";
   import Following from "./Following/index.svelte";
   import Login from "./Login/index.svelte";
+  import Tabs from "./Tabs.svelte";
+  import Tab from "./Tab.svelte";
 
   const LoginStatus = Object.freeze({
     LoggedOut: 'LoggedOut',
@@ -121,7 +123,14 @@
       </div>
     </div>
   {:else}
-    <Following bind:followees={followees} />
+  <Tabs tabs={["Following", "Stars"]}>
+    <Tab title="Following">
+      <Following bind:followees={followees} />
+    </Tab>
+    <Tab title="Stars">
+      <div>stars coming soon</div>
+    </Tab>
+  </Tabs>
   {/if}
 </div>
 
