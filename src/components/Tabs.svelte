@@ -1,7 +1,7 @@
 <script>
   export let tabs = [];
 
-  let activeIdx = 0;
+  export let activeIdx = 0;
 
   const setActiveIdx = (newIdx) => {
     activeIdx = newIdx;

@@ -17,6 +17,7 @@
   let username;
 
   let followees = [];
+  let activeIdx = 0;
 
   const writeCache = async (followees) => {
     const loadedCache = await preload.loadCache();
@@ -123,11 +124,11 @@
       </div>
     </div>
   {:else}
-  <Tabs tabs={["Following", "Stars"]}>
-    <Tab title="Following">
+  <Tabs tabs={["Following", "Stars"]} bind:activeIdx>
+    <Tab idx={0} {activeIdx}>
       <Following bind:followees={followees} />
     </Tab>
-    <Tab title="Stars">
+    <Tab idx={1} {activeIdx}>
       <div>stars coming soon</div>
     </Tab>
   </Tabs>

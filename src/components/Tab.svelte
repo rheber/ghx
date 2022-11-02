@@ -1,7 +1,10 @@
 <script>
-  export let title;
+  export let activeIdx;
+  export let idx;
 </script>
 
-<div>
-  <slot />
-</div>
+{#if activeIdx === idx}
+  <div>
+    <slot />
+  </div>
+{/if}
