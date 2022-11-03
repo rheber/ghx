@@ -17,39 +17,42 @@
   let username;
 
   let followees = [];
+  let stars = [];
   let activeIdx = 0;
 
-  const writeCache = async (followees) => {
+  const writeCache = async (followees, stars) => {
     const loadedCache = await preload.loadCache();
     const parsedCache = JSON.parse(loadedCache);
     let users = parsedCache.users || [];
     const cachedUser = parsedCache.users.find(u => u.login === username);
     if (cachedUser) {
       cachedUser.followees = followees;
+      cachedUser.stars = stars;
     } else {
-      users = [...users, { login: username, followees, }];
+      users = [...users, { login: username, followees, stars, }];
     }
     await preload.saveCache({
       users,
     });
   };
 
-  const debouncedWriteCache = debounce((followees) => {
-    writeCache(followees);
+  const debouncedWriteCache = debounce((followees, stars) => {
+    writeCache(followees, stars);
   }, 500);
 
-  $: debouncedWriteCache(followees);
+  $: debouncedWriteCache(followees, stars);
 
   const range = (start = 0, end) => {
     return [...Array(start + end).keys()].map(i => i + start);
   }
 
-  const fetchFollowees = async (username) => {
+  const fetchUserData = async (username) => {
     const userUrl = `https://api.github.com/users/${username}`
     try {
       // Get user data.
       const userResponse = await fetch(userUrl);
       const userJson = await userResponse.json();
+      console.log(userJson);
 
       // Get followee data.
       const followingAmount = userJson.following;
@@ -62,7 +65,9 @@
         followedUsers = [...followedUsers, ...followingJson];
       }
 
-      return followedUsers;
+      return {
+        followedUsers,
+      };
     } catch (e) {
       console.error(e);
     }
@@ -73,7 +78,8 @@
     const parsedCache = JSON.parse(loadedCache);
     username = submittedUsername;
     loginStatus = LoginStatus.LoggingIn;
-    const fetchedFollowees = await fetchFollowees(username);
+    const userData = await fetchUserData(username);
+    const fetchedFollowees = userData.followedUsers;
     fetchedFollowees.sort((a, b) => {
       return a.login.toLowerCase() < b.login.toLowerCase() ? -1 : 1;
     });
@@ -96,14 +102,16 @@
     let users = parsedCache.users || [];
     if (cachedUser) {
       cachedUser.followees = mappedFollowees;
+      cachedUser.stars = [];
     } else {
-      users = [...users, { login: username, followees: mappedFollowees }];
+      users = [...users, { login: username, followees: mappedFollowees, stars: [] }];
     }
 
     await preload.saveCache({
       users,
     });
     followees = mappedFollowees;
+    stars = [];
     loginStatus = LoginStatus.LogedIn;
   };
 
