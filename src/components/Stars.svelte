@@ -6,10 +6,9 @@
   {#each stars as star, idx (star.id)}
     <div class="item">
       <div>{idx + 1}</div>
+      <div class="name"><strong>{star.full_name}</strong></div>
       <div class="spacer" />
-      <div>{star.full_name}</div>
-      <div class="spacer" />
-      <div>{star.description}</div>
+      <div class="description">{star.description}</div>
       <div class="spacer" />
       <input bind:value={star.annotation} />
     </div>
@@ -22,6 +21,17 @@
     height: 100%;
     padding: 0 5%;
     width: 100%;
+  }
+
+  .name {
+    white-space: nowrap;
+    margin: 0 1em;
+  }
+
+  .description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .item {

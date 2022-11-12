@@ -7,7 +7,7 @@
     <div class="item">
       <div>{idx + 1}</div>
       <div class="spacer" />
-      <div>{followee.login}</div>
+      <div><strong>{followee.login}</strong></div>
       <div class="spacer" />
       <input bind:value={followee.annotation} />
     </div>
