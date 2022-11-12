@@ -65,8 +65,19 @@
         followedUsers = [...followedUsers, ...followingJson];
       }
 
+      // Get stars.
+      let stars = [];
+      const starsUrl = `https://api.github.com/users/${username}/starred?per_page=100`
+      const starsResponse = await fetch(starsUrl);
+      const starsJson = await starsResponse.json();
+      stars = [...stars, ...starsJson];
+      const starsLinkHeader = starsResponse.headers.get("link");
+      console.log(starsJson);
+      console.log(starsLinkHeader);
+
       return {
         followedUsers,
+        stars,
       };
     } catch (e) {
       console.error(e);
@@ -99,19 +110,21 @@
       return followee;
     });
 
+    const mappedStars = userData.stars;
+
     let users = parsedCache.users || [];
     if (cachedUser) {
       cachedUser.followees = mappedFollowees;
       cachedUser.stars = [];
     } else {
-      users = [...users, { login: username, followees: mappedFollowees, stars: [] }];
+      users = [...users, { login: username, followees: mappedFollowees, stars: mappedStars }];
     }
 
     await preload.saveCache({
       users,
     });
     followees = mappedFollowees;
-    stars = [];
+    stars = mappedStars;
     loginStatus = LoginStatus.LogedIn;
   };
 
