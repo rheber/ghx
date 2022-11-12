@@ -1,15 +1,17 @@
 <script>
-  export let followees = [];
+  export let stars = [];
 </script>
 
 <div class="root">
-  {#each followees as followee, idx (followee.id)}
+  {#each stars as star, idx (star.id)}
     <div class="item">
       <div>{idx + 1}</div>
       <div class="spacer" />
-      <div>{followee.login}</div>
+      <div>{star.full_name}</div>
       <div class="spacer" />
-      <input bind:value={followee.annotation} />
+      <div>{star.description}</div>
+      <div class="spacer" />
+      <input bind:value={star.annotation} />
     </div>
   {/each}
 </div>

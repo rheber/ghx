@@ -3,6 +3,7 @@
 
   import AppBar from "./AppBar/index.svelte";
   import Following from "./Following/index.svelte";
+  import Stars from "./Stars.svelte";
   import Login from "./Login/index.svelte";
   import Tabs from "./Tabs.svelte";
   import Tab from "./Tab.svelte";
@@ -84,7 +85,6 @@
         nextStarLink = starsLinks.map(link => link.split(';')).find(link => link[1].includes('rel="next"'));
       }
 
-      console.log(stars);
       return {
         followedUsers,
         stars,
@@ -100,13 +100,12 @@
     username = submittedUsername;
     loginStatus = LoginStatus.LoggingIn;
     const userData = await fetchUserData(username);
+    const cachedUser = parsedCache.users.find(u => u.login === username);
+
     const fetchedFollowees = userData.followedUsers;
     fetchedFollowees.sort((a, b) => {
       return a.login.toLowerCase() < b.login.toLowerCase() ? -1 : 1;
     });
-
-    const cachedUser = parsedCache.users.find(u => u.login === username);
-
     const mappedFollowees = fetchedFollowees.map(f => {
       const followee = { id: f.id, login: f.login };
       if (cachedUser) {
@@ -120,7 +119,22 @@
       return followee;
     });
 
-    const mappedStars = userData.stars;
+    const fetchedStars = userData.stars;
+    fetchedStars.sort((a, b) => {
+      return a.full_name.toLowerCase() < b.full_name.toLowerCase() ? -1 : 1;
+    });
+    const mappedStars = fetchedStars.map(s => {
+      const star = { id: s.id, full_name: s.full_name, description: s.description };
+      if (cachedUser) {
+        const cachedStar = cachedUser.stars.find(
+          cf => cf.id === s.id
+        );
+        if (cachedStar) {
+          star.annotation = cachedStar.annotation;
+        }
+      }
+      return star;
+    });
 
     let users = parsedCache.users || [];
     if (cachedUser) {
@@ -160,7 +174,7 @@
       <Following bind:followees={followees} />
     </Tab>
     <Tab idx={1} {activeIdx}>
-      <div>stars coming soon</div>
+      <Stars bind:stars={stars} />
     </Tab>
   </Tabs>
   {/if}
