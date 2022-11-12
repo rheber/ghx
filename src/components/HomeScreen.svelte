@@ -67,14 +67,24 @@
 
       // Get stars.
       let stars = [];
-      const starsUrl = `https://api.github.com/users/${username}/starred?per_page=100`
-      const starsResponse = await fetch(starsUrl);
-      const starsJson = await starsResponse.json();
+      let starsUrl = `https://api.github.com/users/${username}/starred?per_page=100`
+      let starsResponse = await fetch(starsUrl);
+      let starsJson = await starsResponse.json();
       stars = [...stars, ...starsJson];
-      const starsLinkHeader = starsResponse.headers.get("link");
-      console.log(starsJson);
-      console.log(starsLinkHeader);
+      let starsLinkHeader = starsResponse.headers.get("link");
+      let starsLinks = starsLinkHeader.split(',');
+      let nextStarLink = starsLinks.map(link => link.split(';')).find(link => link[1].includes('rel="next"'));
+      while (nextStarLink) {
+        starsUrl = /<(.*)>/.exec(nextStarLink[0])[1];
+        starsResponse = await fetch(starsUrl);
+        starsJson = await starsResponse.json();
+        stars = [...stars, ...starsJson];
+        starsLinkHeader = starsResponse.headers.get("link");
+        starsLinks = starsLinkHeader.split(',');
+        nextStarLink = starsLinks.map(link => link.split(';')).find(link => link[1].includes('rel="next"'));
+      }
 
+      console.log(stars);
       return {
         followedUsers,
         stars,
