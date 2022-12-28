@@ -73,7 +73,7 @@
       let starsJson = await starsResponse.json();
       stars = [...stars, ...starsJson];
       let starsLinkHeader = starsResponse.headers.get("link");
-      let starsLinks = starsLinkHeader.split(',');
+      let starsLinks = starsLinkHeader?.split(',') || [];
       let nextStarLink = starsLinks.map(link => link.split(';')).find(link => link[1].includes('rel="next"'));
       while (nextStarLink) {
         starsUrl = /<(.*)>/.exec(nextStarLink[0])[1];
